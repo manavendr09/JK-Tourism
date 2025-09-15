@@ -12,11 +12,11 @@ const HeroSection = () => {
           alt="Netarhat - Queen of Chotanagpur"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/60 to-nature/70" />
+        {/* <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/60 to-nature/70" /> */}
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
+      {/* <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
             Discover the
@@ -43,10 +43,10 @@ const HeroSection = () => {
               <Camera className="w-5 h-5 group-hover:scale-110 transition-transform" />
               Virtual Tours
             </Button>
-          </div>
+          </div> */}
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
             <div className="bg-card/20 backdrop-blur-sm rounded-lg p-6 border border-card-foreground/10">
               <div className="text-3xl font-bold text-accent mb-2">50+</div>
               <div className="text-primary-foreground/80">Tourist Destinations</div>
@@ -58,10 +58,10 @@ const HeroSection = () => {
             <div className="bg-card/20 backdrop-blur-sm rounded-lg p-6 border border-card-foreground/10">
               <div className="text-3xl font-bold text-nature mb-2">24/7</div>
               <div className="text-primary-foreground/80">AI Assistant</div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
+      {/* </div> */}
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">

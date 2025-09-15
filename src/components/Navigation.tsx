@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, MapPin, MessageCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const Navigation = () => {
+export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
     { name: "Destinations", href: "#destinations" },
     { name: "Cultural Heritage", href: "#culture" },
     { name: "AI Assistant", href: "#ai" },
     { name: "Virtual Tours", href: "#tours" },
-    { name: "Marketplace", href: "#marketplace" }
+    { name: "Marketplace", href: "#marketplace" },
   ];
 
   return (
@@ -43,7 +45,7 @@ const Navigation = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
               Login
             </Button>
             <Button variant="tribal" size="sm">
@@ -78,7 +80,7 @@ const Navigation = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" onClick={() => navigate("../pages/LoginPage.tsx")}>
                   Login
                 </Button>
                 <Button variant="tribal" size="sm">
@@ -92,6 +94,4 @@ const Navigation = () => {
       </div>
     </nav>
   );
-};
-
-export default Navigation;
+}

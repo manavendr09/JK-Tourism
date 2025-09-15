@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Brain, Languages, Route } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 const AIAssistant = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-gradient-to-b from-background to-secondary/50">
       <div className="container mx-auto px-4">
@@ -22,19 +24,25 @@ const AIAssistant = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="group hover:shadow-nature transition-all duration-300 hover:-translate-y-1">
-              <CardHeader className="pb-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-tribal to-accent rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                  <Brain className="w-6 h-6 text-tribal-foreground" />
-                </div>
-                <CardTitle className="text-lg">Smart Planning</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  AI analyzes your interests, budget, and time to create perfect itineraries
-                </p>
-              </CardContent>
-            </Card>
+     <Card
+  onClick={() => navigate("/smartplanning")}
+  role="button"
+  tabIndex={0}
+  className="group hover:shadow-nature transition-all duration-300 hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-tribal"
+>
+  <CardHeader className="pb-3">
+    <div className="w-12 h-12 bg-gradient-to-r from-tribal to-accent rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+      <Brain className="w-6 h-6 text-tribal-foreground" />
+    </div>
+    <CardTitle className="text-lg">Smart Planning</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p className="text-muted-foreground">
+      AI analyzes your interests, budget, and time to create perfect itineraries.
+    </p>
+  </CardContent>
+</Card>
+
 
             <Card className="group hover:shadow-nature transition-all duration-300 hover:-translate-y-1">
               <CardHeader className="pb-3">
