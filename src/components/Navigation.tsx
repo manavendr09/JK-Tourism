@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, MapPin, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase/firebase.js"; 
+import { doSignOut } from "../../firebase/auth.js"; 
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
+      console.log(currentUser)
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const navItems = [
     { name: "Destinations", href: "#destinations" },
@@ -14,6 +26,12 @@ export default function Navigation() {
     { name: "Virtual Tours", href: "#tours" },
     { name: "Marketplace", href: "#marketplace" },
   ];
+
+  const handleLogout = async () => {
+    await doSignOut();
+    setUser(null);
+    navigate("/login");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/50">
@@ -45,9 +63,21 @@ export default function Navigation() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
-              Login
-            </Button>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <img
+                  src={user.photoURL || "https://via.placeholder.com/40"}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer"
+                  onClick={handleLogout}
+                  title="Click to Logout"
+                />
+              </div>
+            ) : (
+              <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
+                Login
+              </Button>
+            )}
             <Button variant="tribal" size="sm">
               <MessageCircle className="w-4 h-4" />
               Chat with AI
@@ -79,10 +109,23 @@ export default function Navigation() {
                   {item.name}
                 </a>
               ))}
+
               <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
-                <Button variant="ghost" size="sm" onClick={() => navigate("../pages/LoginPage.tsx")}>
-                  Login
-                </Button>
+                {user ? (
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={user.photoURL || "https://via.placeholder.com/40"}
+                      alt="profile"
+                      className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer"
+                      onClick={handleLogout}
+                      title="Click to Logout"
+                    />
+                  </div>
+                ) : (
+                  <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
+                    Login
+                  </Button>
+                )}
                 <Button variant="tribal" size="sm">
                   <MessageCircle className="w-4 h-4" />
                   Chat with AI
