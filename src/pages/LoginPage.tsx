@@ -1,28 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { initializeApp } from 'firebase/app';
 import { 
-  getAuth, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  FacebookAuthProvider 
-} from 'firebase/auth';
-
-// Firebase configuration (replace with your own config)
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+  doSignInwithEmailAndPassword,
+  docreateuserwithEmailAndPassword,
+  doSignInWithGoogle,
+} from '../../firebase/auth'; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -37,14 +19,14 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        await doSignInwithEmailAndPassword(email, password, rememberMe);
         alert('Login successful!');
         navigate('/');
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await docreateuserwithEmailAndPassword(email, password);
         alert('Account created successfully!');
         navigate('/');
       }
@@ -56,12 +38,10 @@ const LoginPage = () => {
     }
   };
 
-  const handleSocialSignIn = async (provider) => {
-    setLoading(true);
-    setError('');
-    
+  const handleGoogleSignIn = async () => {
     try {
-      await signInWithPopup(auth, provider);
+      setLoading(true);
+      await doSignInWithGoogle(rememberMe);
       alert('Login successful!');
       navigate('/');
     } catch (error) {
@@ -72,21 +52,14 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    handleSocialSignIn(provider);
-  };
-
-  const handleFacebookSignIn = () => {
-    const provider = new FacebookAuthProvider();
-    handleSocialSignIn(provider);
-  };
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
       {/* Left side - Image Section */}
       <div className="w-full md:w-1/2 lg:w-3/5 relative">
-        <div className="h-full w-full bg-cover bg-center" style={{ backgroundImage: "url('https://cdn.dribbble.com/users/795597/screenshots/3569676/travel-planning__1_.gif')" }}>
+        <div
+          className="h-full w-full bg-cover bg-center"
+          style={{ backgroundImage: "url('https://cdn.dribbble.com/users/795597/screenshots/3569676/travel-planning__1_.gif')" }}
+        >
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-purple-90/50 flex items-center justify-center p-12">
             <div className="text-white max-w-md">
               <h1 className="text-4xl font-bold mb-4">Discover Your Next Adventure</h1>
@@ -102,25 +75,25 @@ const LoginPage = () => {
           <div className="text-center mb-2">
             <h1 className="text-3xl font-bold text-gray-800">Travel Explorer</h1>
           </div>
-          
+
           <h2 className="text-2xl font-bold mb-2 text-center text-gray-800">
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </h2>
           <p className="text-gray-600 text-center mb-8">
             {isLogin ? 'Sign in to your account to continue your journey' : 'Sign up to start your journey'}
           </p>
-          
+
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
               {error}
             </div>
           )}
-          
+
           <form onSubmit={handleAuth}>
             <div className="mb-6">
               <label className="block text-gray-700 font-medium mb-2">Email Address</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -128,11 +101,11 @@ const LoginPage = () => {
                 required
               />
             </div>
-            
+
             <div className="mb-4">
               <label className="block text-gray-700 font-medium mb-2">Password</label>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -140,12 +113,12 @@ const LoginPage = () => {
                 required
               />
             </div>
-            
+
             {isLogin && (
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     id="remember"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
@@ -156,8 +129,8 @@ const LoginPage = () => {
                 <a href="#" className="text-sm text-blue-600 hover:text-blue-700 transition duration-200">Forgot password?</a>
               </div>
             )}
-            
-            <button 
+
+            <button
               type="submit"
               disabled={loading}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200 disabled:opacity-50 flex items-center justify-center"
@@ -173,15 +146,15 @@ const LoginPage = () => {
               ) : (isLogin ? 'Sign In' : 'Sign Up')}
             </button>
           </form>
-          
+
           <div className="relative flex items-center my-8">
             <div className="flex-grow border-t border-gray-300"></div>
             <span className="flex-shrink mx-4 text-gray-600 text-sm">OR CONTINUE WITH</span>
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
-          
+
           <div className="flex justify-center gap-4 mb-6">
-            <button 
+            <button
               onClick={handleGoogleSignIn}
               disabled={loading}
               className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 w-full disabled:opacity-50"
@@ -194,21 +167,11 @@ const LoginPage = () => {
               </svg>
               Google
             </button>
-            <button 
-              onClick={handleFacebookSignIn}
-              disabled={loading}
-              className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 w-full disabled:opacity-50"
-            >
-              <svg className="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
-              </svg>
-              Facebook
-            </button>
           </div>
-          
+
           <div className="text-center text-sm text-gray-600">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
-            <button 
+            <button
               onClick={() => setIsLogin(!isLogin)}
               className="font-bold text-blue-600 hover:text-blue-700 transition duration-200 focus:outline-none"
             >
